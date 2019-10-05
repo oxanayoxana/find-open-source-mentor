@@ -2,8 +2,10 @@
 
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :omniauthable
+         :recoverable, :rememberable, :validatable, 
+         :omniauthable, omniauth_providers: %i[github]
+
+  enum role: [:mentor, :mentee]
 
   def self.from_omniauth(auth)
     where(email: auth.info.email).first_or_initialize.tap do |user|

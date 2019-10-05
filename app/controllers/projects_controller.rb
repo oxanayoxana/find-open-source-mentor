@@ -1,6 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :authorize!, only: [:edit, :update, :destroy]
 
   def index
     @projects = Project.all
@@ -63,11 +64,16 @@ class ProjectsController < ApplicationController
   end
 
   private
-    def set_project
-      @project = Project.find(params[:id])
-    end
 
-    def project_params
-      params.require(:project).permit!
-    end
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
+  def project_params
+    params.require(:project).permit!
+  end
+
+  def authorize!
+    authorize(@project || Project)
+  end
 end
